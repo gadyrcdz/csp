@@ -197,7 +197,7 @@ def select_mrv_degree(unassigned: list[Course], constraints: list[str]):
     raise Exception("Not implemented")
 
 
-def select_first(unassigned: list[Course], constraints: list[str]):
+def _select_first(unassigned: list[Course], constraints: list[str]):
     #     return the first course in unassigned
     raise Exception("Not implemented")
 
@@ -206,7 +206,7 @@ def backtracking_with_inference(
     unassigned: list[Course],
     assigned: list[Course],
     constraints: list[str],
-    select=select_first,
+    select=_select_first,
 ):
     #     if unassigned is empty
     #         return true

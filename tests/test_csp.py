@@ -3,6 +3,7 @@ from cps_backtracking.csp import (
     _arc_satisfied,
     _degree,
     _neighbors,
+    _select_first,
     ac3,
     backtracking,
     backtracking_with_inference,
@@ -391,6 +392,33 @@ def test_backtracking_with_inference_mrv_degree_satisfies_all_constraints():
         assert assignments[left] != assignments[right]
 
 
+def test_select_first_returns_first_course():
+    course_a = Course("A", ["Monday"])
+    course_b = Course("B", ["Monday"])
+    course_c = Course("C", ["Monday"])
+
+    selected = _select_first([course_a, course_b, course_c], [])
+
+    assert selected is course_a
+
+
+def test_select_first_ignores_constraints():
+    course_a = Course("A", ["Monday"])
+    course_b = Course("B", ["Monday"])
+
+    selected = _select_first([course_a, course_b], ["B!=A"])
+
+    assert selected is course_a
+
+
+def test_select_first_returns_only_course_when_one_unassigned():
+    course_a = Course("A", ["Monday"])
+
+    selected = _select_first([course_a], [])
+
+    assert selected is course_a
+
+
 def test_degree_returns_zero_when_no_constraints_match():
     course_a = Course("A", ["Monday"])
     unassigned_names = {"A", "B"}
@@ -591,3 +619,4 @@ def test_select_mrv_degree_picks_highest_degree_on_tie():
     selected = select_mrv_degree(unassigned, constraints)
 
     assert selected is course_a
+
