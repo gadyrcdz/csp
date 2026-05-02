@@ -322,7 +322,7 @@ def test_backtracking_with_inference_mrv_satisfies_all_constraints():
     assigned = []
 
     solved = backtracking_with_inference(
-        courses, assigned, constraints, select_var=select_mrv
+        courses, assigned, constraints, select=select_mrv
     )
     assignments = {course.name: course.value for course in courses}
 
@@ -352,7 +352,7 @@ def test_backtracking_with_inference_degree_satisfies_all_constraints():
     assigned = []
 
     solved = backtracking_with_inference(
-        courses, assigned, constraints, select_var=select_degree
+        courses, assigned, constraints, select=select_degree
     )
     assignments = {course.name: course.value for course in courses}
 
@@ -382,7 +382,7 @@ def test_backtracking_with_inference_mrv_degree_satisfies_all_constraints():
     assigned = []
 
     solved = backtracking_with_inference(
-        courses, assigned, constraints, select_var=select_mrv_degree
+        courses, assigned, constraints, select=select_mrv_degree
     )
     assignments = {course.name: course.value for course in courses}
 

@@ -1,4 +1,5 @@
 from collections import deque
+import copy
 
 
 class Course:
@@ -19,11 +20,9 @@ class Course:
 
 def initialize(variables, domain) -> list[Course]:
     courses = []
-
-    for variable in variables:
-        course = Course(name=variable, domain=domain.copy())
+    for each in variables:
+        course = Course(each, copy.deepcopy(domain))
         courses.append(course)
-
     return courses
 
 
@@ -94,7 +93,15 @@ def _neighbors(name: str, constraints: list[str]):
 
     #     return result
 
-    raise Exception("Not implemented")
+    # raise Exception("Not implemented")
+    result = []
+    for e in constraints:
+        left, right = e.split("!=")
+        if(name == left):
+            result.append(right)
+        elif(name ==right):
+            result.append(left)
+    return result
 
 
 def _arc_satisfied(x: str, y: str, X: Course, Y: Course, constraints: list[str]):
@@ -107,7 +114,13 @@ def _arc_satisfied(x: str, y: str, X: Course, Y: Course, constraints: list[str])
     #                 return false
 
     #     return true
-    raise Exception("Not implemented")
+    # raise Exception("Not implemented")
+    for e in constraints:
+        left, right = e.split("!=")
+        if((X.name == left) and (Y.name == right) or (X.name == right) and (Y.name == left)):
+            if(x == y):
+                return False
+    return True
 
 
 def revise(X: Course, Y: Course, constraints: list[str]):
@@ -120,13 +133,26 @@ def revise(X: Course, Y: Course, constraints: list[str]):
     #             revised <- true
 
     #     return revised
-    raise Exception("Not implemented")
+    # raise Exception("Not implemented")
+    revised = False
+    for x in X.domain[:]:
+        if not any(_arc_satisfied(x,y,X,Y, constraints) for y in Y.domain):
+            X.domain.remove(x)
+            revised = True
 
+    return revised
 
 def ac3(courses: list[Course], constraints: list[str]):
     #     course map <- dictionary of courses using the name as key
     #     queue <- empty deque
-
+    assigned_by_name = {
+        assigned_course.name: assigned_course for assigned_course in courses
+    }
+    queue = deque()
+    for e in constraints:
+        left, right = e.split("!=")
+        queue.append((left,right))
+        queue.append((right,left))
     #     for each constraint in constraints
     #         left, right <- split the constraint by "!="
 
@@ -137,16 +163,29 @@ def ac3(courses: list[Course], constraints: list[str]):
     #         x name, y name <- take the first element from queue
     #         X <- course with x name from course map
     #         Y <- course with y name from course map
-
     #         if revise(X, Y, constraints)
     #             if X domain is empty
     #                 return false
     #             for each z name in neighbors(x name, constraints)
     #                 if z name is not equal to y name
     #                     add (z name, x name) to queue
+    while(queue):
+        x_name, y_name = queue.pop()
+        X = assigned_by_name.get(x_name)
+        Y = assigned_by_name.get(y_name)
+
+        if(revise(X,Y, constraints)):
+            if(len(X.domain) == 0):
+                return False
+            for eachZ in _neighbors(x_name, constraints):
+                if(eachZ != y_name):
+                    queue.append((eachZ,x_name))
+    return True
+
+
 
     #     return true
-    raise Exception("Not implemented")
+    # raise Exception("Not implemented")
 
 
 def select_mrv(unassigned: list[Course], constraints: list[str]):
@@ -236,3 +275,11 @@ def backtracking_with_inference(
     #         remove the assignment from the course
     #     return false
     raise Exception("Not implemented")
+
+
+
+courses = initialize(["A", "B"], ["Monday", "Tuesday"])
+
+result = ac3(courses, ["A!=B"])
+
+print(result)
