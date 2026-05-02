@@ -619,4 +619,3 @@ def test_select_mrv_degree_picks_highest_degree_on_tie():
     selected = select_mrv_degree(unassigned, constraints)
 
     assert selected is course_a
-

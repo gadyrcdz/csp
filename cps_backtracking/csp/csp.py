@@ -1,22 +1,41 @@
+<<<<<<< HEAD
 from collections import deque
+=======
+>>>>>>> a673458afb5cb7325292b8700196d7b8a10399e4
 import copy
 
 
 class Course:
-    def __init__(self, name, domain) -> None:
+#     function __init__(name, domain)
+#         name <- name
+#         domain <- domain
+#         value <- empty
+    def __init__(self, name, domain):
         self.name = name
         self.domain = domain
-        self.value = None
+        self.value;
 
-    def assign(self, value):
+#     function assign(value)
+#         value of the course <- value
+    def assign(self,value):
         self.value = value
-
+#     function remove assignment
+#         value of the course <- empty
     def remove_assignment(self):
-        self.value = None
+        self.value = 0
 
-    def __str__(self) -> str:
-        return f"{self.name}: {self.value}"
-
+# function initialize(variables, domain)
+#     courses <- empty list
+#     for each variable in variables
+#         course <- new course with that variable and a copy of the domain
+#         add course to courses
+#     return courses
+    def initialize(self, variables, domain):
+        courses = []
+        for each in variables:
+            course = Course(each, copy.deepcopy(domain))
+            courses.append(course)
+        return courses
 
 def initialize(variables, domain) -> list[Course]:
     courses = []
@@ -25,6 +44,28 @@ def initialize(variables, domain) -> list[Course]:
         courses.append(course)
     return courses
 
+    def is_consistent(self, course, assignedCourses, constraints):
+        assigned_by_name = assignedCourses.get("name", 0)
+
+        for each in constraints:
+            left, right = each.split("!=")
+
+            if(course is not left and course is not right):
+                continue
+            
+            if(course == left):
+                other_name = right
+            else:
+                other_name = left
+
+            other_course = assignedCourses.get(other_name, 0)
+            if(other_course == 0):
+                continue
+            if(course.value == other_course):
+                return False
+            
+        return True
+                
 
 def is_consistent(course: Course, assigned_courses: list[Course], constraints) -> bool:
     assigned_by_name = {
@@ -92,7 +133,16 @@ def _neighbors(name: str, constraints: list[str]):
     #             add left to result
 
     #     return result
+    result = []
+    for e in constraints:
+        left, right = e.split("!=")
+        if(name == left):
+            result.append(right)
+        elif(name ==right):
+            result.append(left)
+    return result
 
+<<<<<<< HEAD
     # raise Exception("Not implemented")
     result = []
     for e in constraints:
@@ -102,6 +152,12 @@ def _neighbors(name: str, constraints: list[str]):
         elif(name ==right):
             result.append(left)
     return result
+=======
+
+            
+
+    # raise Exception("Not implemented")
+>>>>>>> a673458afb5cb7325292b8700196d7b8a10399e4
 
 
 def _arc_satisfied(x: str, y: str, X: Course, Y: Course, constraints: list[str]):
@@ -117,7 +173,11 @@ def _arc_satisfied(x: str, y: str, X: Course, Y: Course, constraints: list[str])
     # raise Exception("Not implemented")
     for e in constraints:
         left, right = e.split("!=")
+<<<<<<< HEAD
         if((X.name == left) and (Y.name == right) or (X.name == right) and (Y.name == left)):
+=======
+        if((X == left) and (X == right) or (X == right) and (Y == left)):
+>>>>>>> a673458afb5cb7325292b8700196d7b8a10399e4
             if(x == y):
                 return False
     return True
